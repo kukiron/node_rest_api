@@ -8,7 +8,7 @@
     "dev:server": "nodemon server.js",
     "lint": "eslint . --ext .js, .jsx",
     "lint:fix": "eslint --fix . --ext .js, .jsx",
-    "test": "mocha tests/*.test.js",
+    "test": "export NODE_ENV=test || SET \"NODE_ENV=test\" && mocha tests/*.test.js --exit",
     "test:watch": "nodemon --exec \"npm test\""
   },
   "husky": {
@@ -20,12 +20,19 @@
     "node": "9.5.0",
     "npm": "5.6.0"
   },
-  "keywords": ["Node.js", "Express", "MongoDB", "Mongoose", "Todo-app"],
+  "keywords": [
+    "Node.js",
+    "Express",
+    "MongoDB",
+    "Mongoose",
+    "Todo-app"
+  ],
   "author": "Kafil Uddin Kiron",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
+    "lodash": "^4.17.5",
     "mongodb": "^3.0.3",
     "mongoose": "^5.0.7",
     "morgan": "^1.9.0",
