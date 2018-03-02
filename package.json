@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "dev:server": "nodemon server.js",
-    "heroku-prebuild": "npm install --only=dev",
     "lint": "eslint . --ext .js, .jsx",
     "lint:fix": "eslint --fix . --ext .js, .jsx",
     "test": "mocha tests/*.test.js",
