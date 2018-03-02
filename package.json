@@ -1,0 +1,42 @@
+{
+  "name": "node-mongo-todo-app",
+  "version": "1.0.0",
+  "description": "Todo app built with Node, express & mongodb",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev:server": "nodemon server.js",
+    "heroku-prebuild": "npm install --only=dev",
+    "lint": "eslint . --ext .js, .jsx",
+    "lint:fix": "eslint --fix . --ext .js, .jsx",
+    "test": "mocha tests/*.test.js",
+    "test:watch": "nodemon --exec \"npm test\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
+  },
+  "engines": {
+    "node": "9.5.0",
+    "npm": "5.6.0"
+  },
+  "keywords": ["Node.js", "Express", "MongoDB", "Mongoose", "Todo-app"],
+  "author": "Kafil Uddin Kiron",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.3",
+    "mongoose": "^5.0.7",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.1"
+  },
+  "devDependencies": {
+    "eslint-config-latest": "^1.0.6",
+    "expect": "^22.4.0",
+    "husky": "^0.15.0-rc.8",
+    "mocha": "^5.0.1",
+    "supertest": "^3.0.0"
+  }
+}
