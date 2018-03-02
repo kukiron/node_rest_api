@@ -14,4 +14,10 @@ module.exports = app => {
   // POST requests
   app.post("/todos", todoController.postToDo)
   app.post("/users", userController.signUpUser)
+
+  // DELETE requests
+  app.delete("/todos/:id", todoController.deleteToDo)
+
+  // PATCH requests
+  app.patch("/todos/:id", todoController.updateToDos)
 }
