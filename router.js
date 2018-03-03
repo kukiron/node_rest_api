@@ -8,8 +8,9 @@ module.exports = app => {
 
   // GET requests
   app.get("/todos", todoController.getAllToDos)
-  app.get("/users", userController.getUsers)
+  app.get("/users", userController.getAllUsers)
   app.get("/todos/:id", todoController.getToDoById)
+  app.get("/users/me", userController.getUserByToken)
 
   // POST requests
   app.post("/todos", todoController.postToDo)
@@ -17,6 +18,7 @@ module.exports = app => {
 
   // DELETE requests
   app.delete("/todos/:id", todoController.deleteToDo)
+  app.delete("/users/:id", userController.deleteUser)
 
   // PATCH requests
   app.patch("/todos/:id", todoController.updateToDos)
