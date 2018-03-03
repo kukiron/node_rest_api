@@ -32,6 +32,22 @@ exports.signUpUser = (req, res, next) => {
   })
 }
 
+exports.loginUser = (req, res) => {
+  const body = pick(req.body, ["email", "password"])
+
+  User.findByCredentials(body.email, body.password)
+    .then(user => {
+      return user.generateToken().then(token => {
+        res
+          .header("x-auth", token)
+          .send({ message: "Succfully logged in", userobj: user })
+      })
+    })
+    .catch(err => {
+      res.status(400).send(err)
+    })
+}
+
 exports.getAllUsers = (req, res) => {
   User.find().then(
     users => {
