@@ -4,7 +4,7 @@ const isBoolean = require("lodash/isBoolean")
 
 const ToDo = require("../models/todo")
 
-exports.postToDo = (req, res) => {
+exports.addTodo = (req, res) => {
   const { todo, completed, completedAt } = req.body
 
   const todoItem = new ToDo({
