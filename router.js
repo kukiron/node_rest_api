@@ -13,8 +13,9 @@ module.exports = app => {
   app.get("/users/me", userController.getUserByToken)
 
   // POST requests
-  app.post("/todos", todoController.postToDo)
-  app.post("/users", userController.signUpUser)
+  app.post("/todos/addtodo", todoController.addTodo)
+  app.post("/users/signup", userController.signUpUser)
+  app.post("/users/login", userController.loginUser)
 
   // DELETE requests
   app.delete("/todos/:id", todoController.deleteToDo)
