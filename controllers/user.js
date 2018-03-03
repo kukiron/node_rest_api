@@ -48,6 +48,19 @@ exports.loginUser = (req, res) => {
     })
 }
 
+exports.logoutUser = (req, res) => {
+  const { user, token } = req
+
+  user
+    .removeToken(token)
+    .then(() => {
+      res.status(200).send({ message: "You are logged out" })
+    })
+    .catch(err => {
+      res.status(400).send(err)
+    })
+}
+
 exports.getAllUsers = (req, res) => {
   User.find().then(
     users => {
@@ -60,18 +73,7 @@ exports.getAllUsers = (req, res) => {
 }
 
 exports.getUserByToken = (req, res) => {
-  const token = req.header("x-auth")
-
-  User.findByToken(token)
-    .then(user => {
-      if (!user) {
-        return Promise.reject()
-      }
-      res.send(user)
-    })
-    .catch(err => {
-      res.status(401).send(err)
-    })
+  res.send(req.user)
 }
 
 exports.deleteUser = (req, res) => {
