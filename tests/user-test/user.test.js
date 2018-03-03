@@ -76,6 +76,56 @@ describe("Requests --> User:", () => {
     })
   })
 
+  describe("POST '/users/login'", () => {
+    it("should return a token for valid login credentials", done => {
+      const { _id, email, password } = sampleUsers[1]
+
+      request(app)
+        .post("/users/login")
+        .send({ email, password })
+        .expect(200)
+        .expect("Content-Type", /json/)
+        .expect(res => expect(res.header["x-auth"]).to.exist)
+        .end((err, res) => {
+          err
+            ? done(err)
+            : User.findById(_id)
+                .then(user => {
+                  expect(user.tokens[0]).to.include({
+                    access: "auth",
+                    token: res.header["x-auth"]
+                  })
+                  done()
+                })
+                .catch(err => done(err))
+        })
+    })
+
+    it("should return 400 when invalid login info used", done => {
+      const { _id, email } = sampleUsers[1]
+      const password = "000009"
+
+      request(app)
+        .post("/users/login")
+        .send({ email, password })
+        .expect("Content-Type", /html/)
+        .expect(res => {
+          expect(res.statusCode).to.equal(400)
+          expect(res.header["x-auth"]).to.be.a("undefined")
+        })
+        .end(err => {
+          err
+            ? done(err)
+            : User.findById(_id)
+                .then(user => {
+                  expect(user.tokens.length).to.equal(0)
+                  done()
+                })
+                .catch(err => done(err))
+        })
+    })
+  })
+
   describe("GET '/users/me'", () => {
     it("should return user if authenticated", done => {
       request(app)
