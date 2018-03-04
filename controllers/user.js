@@ -57,7 +57,7 @@ exports.logoutUser = (req, res) => {
       res.status(200).send({ message: "You are logged out" })
     })
     .catch(err => {
-      res.status(400).send(err)
+      res.status(401).send(err)
     })
 }
 

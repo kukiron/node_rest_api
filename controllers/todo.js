@@ -5,12 +5,9 @@ const isBoolean = require("lodash/isBoolean")
 const ToDo = require("../models/todo")
 
 exports.addTodo = (req, res) => {
-  const { todo, completed, completedAt } = req.body
-
   const todoItem = new ToDo({
-    todo,
-    completed,
-    completedAt
+    todo: req.body.todo,
+    _creator: req.user._id
   })
 
   todoItem.save().then(
@@ -27,7 +24,7 @@ exports.addTodo = (req, res) => {
 }
 
 exports.getAllToDos = (req, res) => {
-  ToDo.find().then(
+  ToDo.find({ _creator: req.user._id }).then(
     todos => {
       res.send({ todos })
     },
@@ -43,7 +40,7 @@ exports.getToDoById = (req, res) => {
   if (!ObjectID.isValid(id))
     return res.status(404).send({ message: "Invalid ID" })
 
-  ToDo.findById(id)
+  ToDo.findOne({ _id: id, _creator: req.user._id })
     .then(todo => {
       return !todo
         ? res
@@ -60,7 +57,7 @@ exports.deleteToDo = (req, res) => {
   if (!ObjectID.isValid(id))
     return res.status(404).send({ message: "Invalid ID" })
 
-  ToDo.findByIdAndRemove(id)
+  ToDo.findOneAndRemove({ _id: id, _creator: req.user._id })
     .then(todo => {
       return !todo
         ? res
@@ -87,7 +84,11 @@ exports.updateToDos = (req, res) => {
     body.completedAt = null
   }
 
-  ToDo.findByIdAndUpdate(id, { $set: body }, { new: true, runValidators: true })
+  ToDo.findOneAndUpdate(
+    { _id: id, _creator: req.user._id },
+    { $set: body },
+    { new: true, runValidators: true }
+  )
     .then(todo => {
       return !todo
         ? res
