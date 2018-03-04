@@ -9,6 +9,12 @@ node_js:
   - "6"
   - "8"
 
+services:
+  - MongoDB
+
+env:
+  - JWT_SECRET=savjbsu7864385hbhgbewoio345135sdf0ookh
+
 cache:
   directories:
   - node_modules
