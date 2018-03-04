@@ -3,7 +3,7 @@ const { expect } = require("chai")
 
 const app = require("../../server")
 const User = require("../../models/user")
-const { sampleUsers, populateUsers } = require("./user-data")
+const { sampleUsers, populateUsers } = require("../seed-data")
 
 describe("Requests --> User:", () => {
   beforeEach(populateUsers)
@@ -91,7 +91,7 @@ describe("Requests --> User:", () => {
             ? done(err)
             : User.findById(_id)
                 .then(user => {
-                  expect(user.tokens[0]).to.include({
+                  expect(user.tokens[1]).to.include({
                     access: "auth",
                     token: res.header["x-auth"]
                   })
@@ -118,7 +118,7 @@ describe("Requests --> User:", () => {
             ? done(err)
             : User.findById(_id)
                 .then(user => {
-                  expect(user.tokens.length).to.equal(0)
+                  expect(user.tokens.length).to.equal(1)
                   done()
                 })
                 .catch(err => done(err))
@@ -148,6 +148,37 @@ describe("Requests --> User:", () => {
           expect(res.statusCode).to.equal(401)
           expect(res.body).to.be.an("object").that.is.empty
         })
+        .end(done)
+    })
+  })
+
+  describe("DELETE '/user/me/logout'", () => {
+    it("should delte the token & log user out", done => {
+      request(app)
+        .delete("/users/me/token")
+        .set("x-auth", sampleUsers[0].tokens[0].token)
+        .expect("Content-Type", /json/)
+        .expect(res => expect(res.statusCode).to.equal(200))
+        .end(err => {
+          err
+            ? done(err)
+            : User.findById(sampleUsers[0]._id)
+                .then(user => {
+                  expect(user.tokens).to.be.an("array").that.is.empty
+                  done()
+                })
+                .catch(err => done(err))
+        })
+    })
+
+    it("should return 401 if the token is invalid", done => {
+      const token = "ab00000009bc"
+
+      request(app)
+        .delete("/users/me/token")
+        .set("x-auth", token)
+        .expect("Content-Type", /html/)
+        .expect(res => expect(res.statusCode).to.equal(401))
         .end(done)
     })
   })
