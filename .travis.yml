@@ -13,7 +13,7 @@ services:
   - mongodb
 
 env:
-  - JWT_SECRET=savjbsu7864385hbhgbewoio345135sdf0ookh
+  - NODE_ENV=test
 
 cache:
   directories:
