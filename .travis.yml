@@ -13,6 +13,7 @@ services:
   - MongoDB
 
 env:
+  - NODE_ENV=travis
   - JWT_SECRET=savjbsu7864385hbhgbewoio345135sdf0ookh
 
 cache:
@@ -25,4 +26,4 @@ before_install:
 install:
   - npm install
 
-script: npm test
+script: npm run test:ci
