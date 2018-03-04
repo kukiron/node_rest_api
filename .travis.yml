@@ -13,7 +13,6 @@ services:
   - MongoDB
 
 env:
-  - NODE_ENV=travis
   - JWT_SECRET=savjbsu7864385hbhgbewoio345135sdf0ookh
 
 cache:
