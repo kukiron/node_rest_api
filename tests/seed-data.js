@@ -52,7 +52,7 @@ const sampleToDos = [
 ]
 
 const populateUsers = function(done) {
-  this.timeout(5000)
+  this.timeout(10000)
   User.remove({})
     .then(() => {
       const userOne = new User(sampleUsers[0]).save()
@@ -64,7 +64,7 @@ const populateUsers = function(done) {
 }
 
 const populateTodos = function(done) {
-  this.timeout(5000)
+  this.timeout(10000)
   ToDo.remove({})
     .then(() => ToDo.insertMany(sampleToDos))
     .then(() => done())
