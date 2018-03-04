@@ -4,8 +4,6 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const pick = require("lodash/pick")
 
-const configSecret = require("../config/config-secret.js")
-
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
@@ -68,7 +66,7 @@ userSchema.methods.generateToken = function() {
   const user = this
   const access = "auth"
   const token = jwt
-    .sign({ _id: user._id.toHexString(), access }, configSecret.secret)
+    .sign({ _id: user._id.toHexString(), access }, process.env.JWT_SECRET)
     .toString()
 
   user.tokens = user.tokens.concat([{ access, token }])
@@ -105,7 +103,7 @@ userSchema.statics.findByToken = function(token) {
   let decoded
 
   try {
-    decoded = jwt.verify(token, configSecret.secret)
+    decoded = jwt.verify(token, process.env.JWT_SECRET)
   } catch (err) {
     return Promise.reject(`User token error - ${err.message}`)
   }

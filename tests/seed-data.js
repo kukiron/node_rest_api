@@ -1,7 +1,6 @@
 const { ObjectID } = require("mongodb")
 const jwt = require("jsonwebtoken")
 
-const configSecret = require("../config/config-secret")
 const User = require("../models/user")
 const ToDo = require("../models/todo")
 
@@ -17,7 +16,7 @@ const sampleUsers = [
       {
         access: "auth",
         token: jwt
-          .sign({ _id: userOneId, access: "auth" }, configSecret.secret)
+          .sign({ _id: userOneId, access: "auth" }, process.env.JWT_SECRET)
           .toString()
       }
     ]
@@ -30,7 +29,7 @@ const sampleUsers = [
       {
         access: "auth",
         token: jwt
-          .sign({ _id: userTwoId, access: "auth" }, configSecret.secret)
+          .sign({ _id: userTwoId, access: "auth" }, process.env.JWT_SECRET)
           .toString()
       }
     ]
