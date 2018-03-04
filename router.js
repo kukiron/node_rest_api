@@ -8,21 +8,21 @@ module.exports = app => {
   })
 
   // GET requests
-  app.get("/todos", todoController.getAllToDos)
+  app.get("/todos", authenticate, todoController.getAllToDos)
   app.get("/users", userController.getAllUsers)
-  app.get("/todos/:id", todoController.getToDoById)
+  app.get("/todos/:id", authenticate, todoController.getToDoById)
   app.get("/users/me", authenticate, userController.getUserByToken)
 
   // POST requests
-  app.post("/todos/addtodo", todoController.addTodo)
+  app.post("/todos/addtodo", authenticate, todoController.addTodo)
   app.post("/users/signup", userController.signUpUser)
   app.post("/users/login", userController.loginUser)
 
   // DELETE requests
-  app.delete("/todos/:id", todoController.deleteToDo)
+  app.delete("/todos/:id", authenticate, todoController.deleteToDo)
   app.delete("/users/:id", userController.deleteUser)
   app.delete("/users/me/token", authenticate, userController.logoutUser)
 
   // PATCH requests
-  app.patch("/todos/:id", todoController.updateToDos)
+  app.patch("/todos/:id", authenticate, todoController.updateToDos)
 }
