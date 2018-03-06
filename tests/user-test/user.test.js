@@ -2,7 +2,7 @@ const request = require("supertest")
 const { expect } = require("chai")
 
 const app = require("../../server")
-const User = require("../../models/user")
+const User = require("../../src/models/user")
 const { sampleUsers, populateUsers } = require("../seed-data")
 
 describe("Requests --> User:", () => {
@@ -155,7 +155,7 @@ describe("Requests --> User:", () => {
   describe("DELETE '/user/me/logout'", () => {
     it("should delte the token & log user out", done => {
       request(app)
-        .delete("/users/me/token")
+        .delete("/users/me/logout")
         .set("x-auth", sampleUsers[0].tokens[0].token)
         .expect("Content-Type", /json/)
         .expect(res => expect(res.statusCode).to.equal(200))
@@ -175,7 +175,7 @@ describe("Requests --> User:", () => {
       const token = "ab00000009bc"
 
       request(app)
-        .delete("/users/me/token")
+        .delete("/users/me/logout")
         .set("x-auth", token)
         .expect("Content-Type", /html/)
         .expect(res => expect(res.statusCode).to.equal(401))

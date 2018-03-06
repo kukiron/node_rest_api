@@ -3,8 +3,9 @@ const userController = require("./controllers/user")
 const authenticate = require("./middlewares/authenticate")
 
 module.exports = app => {
+  // Sample welcome page
   app.get("/", (req, res) => {
-    res.send("Welcome to the REST API server!")
+    res.render("index", { title: "Node.js REST API" })
   })
 
   /** Requests with authentication **/
@@ -13,7 +14,7 @@ module.exports = app => {
   app.get("/users/me", authenticate, userController.getUserByToken) // User's account/dashboard route
   app.post("/todos/addtodo", authenticate, todoController.addTodo)
   app.delete("/todos/:id", authenticate, todoController.deleteToDo)
-  app.delete("/users/me/token", authenticate, userController.logoutUser)
+  app.delete("/users/me/logout", authenticate, userController.logoutUser)
   app.patch("/todos/:id", authenticate, todoController.updateToDos)
 
   /** Routes generating auth token **/

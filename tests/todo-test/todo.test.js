@@ -3,7 +3,7 @@ const { expect } = require("chai")
 const { ObjectID } = require("mongodb")
 
 const app = require("../../server")
-const ToDo = require("../../models/todo")
+const ToDo = require("../../src/models/todo")
 const {
   sampleUsers,
   populateUsers,
