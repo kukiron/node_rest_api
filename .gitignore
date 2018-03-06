@@ -1,5 +1,5 @@
 node_modules/
-playground/
+sandbox/
 config.json
 desktop.ini
 *.log
