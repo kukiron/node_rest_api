@@ -4,99 +4,97 @@ const isBoolean = require("lodash/isBoolean")
 
 const ToDo = require("../models/todo")
 
-exports.addTodo = (req, res) => {
+exports.addTodo = async (req, res) => {
   const todoItem = new ToDo({
     todo: req.body.todo,
     _creator: req.user._id
   })
 
-  todoItem.save().then(
-    doc => {
-      res.send({
-        message: "New todo added successfully",
-        todoItem: doc
-      })
-    },
-    err => {
-      res.status(400).send(err.message)
-    }
-  )
+  try {
+    const doc = await todoItem.save()
+    res.send({
+      message: "New todo added successfully",
+      todoItem: doc
+    })
+  } catch (err) {
+    res.status(400).send(err.message)
+  }
 }
 
-exports.getAllToDos = (req, res) => {
-  ToDo.find({ _creator: req.user._id }).then(
-    todos => {
-      res.send({ todos })
-    },
-    err => {
-      res.status(400).send(err.message)
-    }
-  )
+exports.getAllToDos = async (req, res) => {
+  try {
+    const todos = await ToDo.find({ _creator: req.user._id })
+    res.send({ todos })
+  } catch (err) {
+    res.status(400).send(err.message)
+  }
 }
 
-exports.getToDoById = (req, res) => {
+exports.getToDoById = async (req, res) => {
   const { id } = req.params
 
   if (!ObjectID.isValid(id))
     return res.status(404).send({ message: "Invalid ID" })
 
-  ToDo.findOne({ _id: id, _creator: req.user._id })
-    .then(todo => {
-      return !todo
-        ? res
-            .status(400)
-            .send({ message: "Bad request! The todo cannot be found" })
-        : res.send({ message: "Todo found", todo })
-    })
-    .catch(err => res.status(404).send({ message: err.message }))
+  try {
+    const todo = await ToDo.findOne({ _id: id, _creator: req.user._id })
+    !todo
+      ? res
+          .status(400)
+          .send({ message: "Bad request! The todo cannot be found" })
+      : res.send({ message: "Todo found", todo })
+  } catch (err) {
+    res.status(404).send({ message: err.message })
+  }
 }
 
-exports.deleteToDo = (req, res) => {
+exports.deleteToDo = async (req, res) => {
   const { id } = req.params
 
   if (!ObjectID.isValid(id))
     return res.status(404).send({ message: "Invalid ID" })
 
-  ToDo.findOneAndRemove({ _id: id, _creator: req.user._id })
-    .then(todo => {
-      return !todo
-        ? res
-            .status(400)
-            .send({ message: "Bad request! The todo cannot be found" })
-        : res.send({ message: "Successfully deleted the todo", todo })
+  try {
+    const todo = await ToDo.findOneAndRemove({
+      _id: id,
+      _creator: req.user._id
     })
-    .catch(err => {
-      res.status(404).send({ message: err.message })
-    })
+    !todo
+      ? res
+          .status(400)
+          .send({ message: "Bad request! The todo cannot be found" })
+      : res.send({ message: "Successfully deleted the todo", todo })
+  } catch (err) {
+    res.status(404).send({ message: err.message })
+  }
 }
 
-exports.updateToDos = (req, res) => {
+exports.updateToDos = async (req, res) => {
   const { id } = req.params
   const body = pick(req.body, ["todo", "completed"])
 
   if (!ObjectID.isValid(id))
     return res.status(404).send({ message: "Invalid ID" })
 
-  if (isBoolean(body.completed) && body.completed) {
+  if (body.completed && isBoolean(body.completed)) {
     body.completedAt = new Date().getTime()
   } else {
     body.completed = false
     body.completedAt = null
   }
 
-  ToDo.findOneAndUpdate(
-    { _id: id, _creator: req.user._id },
-    { $set: body },
-    { new: true, runValidators: true }
-  )
-    .then(todo => {
-      return !todo
-        ? res
-            .status(400)
-            .send({ message: "Bad request! The todo cannot be updated" })
-        : res.send({ message: "Successfully updated the todo", todo })
-    })
-    .catch(err => {
-      res.status(404).send({ message: err.message })
-    })
+  try {
+    const todo = await ToDo.findOneAndUpdate(
+      { _id: id, _creator: req.user._id },
+      { $set: body },
+      { new: true, runValidators: true }
+    )
+    !todo
+      ? res
+          .status(400)
+          .send({ message: "Bad request! The todo cannot be updated" })
+      : res.send({ message: "Successfully updated the todo", todo })
+  } catch (err) {
+    res.status(404).send({ message: err.message })
+  }
 }

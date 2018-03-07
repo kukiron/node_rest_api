@@ -84,18 +84,21 @@ userSchema.methods.removeToken = function(token) {
   })
 }
 
-userSchema.statics.findByCredentials = function(email, password) {
+userSchema.statics.findByCredentials = async function(email, password) {
   const User = this
 
-  return User.findOne({ email }).then(user => {
-    if (!user) return Promise.reject("No user found with this email")
-
-    return new Promise((resolve, reject) => {
-      bcrypt.compare(password, user.password, (err, res) => {
-        res ? resolve(user) : reject("Invalid login info")
-      })
-    })
-  })
+  try {
+    const user = await User.findOne({ email })
+    return !user
+      ? Promise.reject("No user found with this email")
+      : new Promise((resolve, reject) => {
+          bcrypt.compare(password, user.password, (err, res) => {
+            res ? resolve(user) : reject("Invalid login info")
+          })
+        })
+  } catch (err) {
+    throw new Error()
+  }
 }
 
 userSchema.statics.findByToken = function(token) {

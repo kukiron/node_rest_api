@@ -3,94 +3,81 @@ const pick = require("lodash/pick")
 
 const User = require("../models/user")
 
-exports.signUpUser = (req, res, next) => {
+exports.signUpUser = async (req, res) => {
   const { email } = req.body
+  const body = pick(req.body, ["email", "password"])
+  const user = new User(body)
 
-  // See whether a user with a given email exists
-  User.findOne({ email }, (err, existingUser) => {
-    if (err) return next(err)
-
+  try {
+    const existingUser = await User.findOne({ email })
     if (existingUser)
       return res.status(422).send({ message: "Email is in use" })
 
-    // If not, create a new user & save
-    const body = pick(req.body, ["email", "password"])
-    const user = new User(body)
-
-    user
-      .save()
-      .then(() => user.generateToken())
-      .then(token => {
-        res.header("x-auth", token).send({
-          message: "New user account is successfully creaed",
-          userObj: user
-        })
-      })
-      .catch(err => {
-        res.status(400).send(err.message)
-      })
-  })
+    await user.save()
+    const token = await user.generateToken()
+    res.header("x-auth", token).send({
+      message: "New user account is successfully creaed",
+      userObj: user
+    })
+  } catch (err) {
+    res.status(400).send(err.message)
+  }
 }
 
-exports.loginUser = (req, res) => {
-  const body = pick(req.body, ["email", "password"])
+exports.loginUser = async (req, res) => {
+  const { email, password } = pick(req.body, ["email", "password"])
 
-  User.findByCredentials(body.email, body.password)
-    .then(user => {
-      return user.generateToken().then(token => {
-        res
-          .header("x-auth", token)
-          .send({ message: "Succfully logged in", userobj: user })
-      })
-    })
-    .catch(err => {
-      res.status(400).send(err)
-    })
+  try {
+    const user = await User.findByCredentials(email, password)
+    const token = await user.generateToken()
+    res
+      .header("x-auth", token)
+      .send({ message: "Succfully logged in", userobj: user })
+  } catch (err) {
+    res.status(400).send(err)
+  }
 }
 
-exports.logoutUser = (req, res) => {
+exports.logoutUser = async (req, res) => {
   const { user, token } = req
 
-  user
-    .removeToken(token)
-    .then(() => {
-      res.status(200).send({ message: "You are logged out" })
-    })
-    .catch(err => {
-      res.status(401).send(err)
-    })
-}
-
-exports.getAllUsers = (req, res) => {
-  User.find().then(
-    users => {
-      res.send({ users })
-    },
-    err => {
-      res.status(400).send(err)
-    }
-  )
+  try {
+    await user.removeToken(token)
+    res.status(200).send({ message: "You are logged out" })
+  } catch (err) {
+    res.status(401).send(err)
+  }
 }
 
 exports.getUserByToken = (req, res) => {
   res.send(req.user)
 }
 
-exports.deleteUser = (req, res) => {
+// for routes with test purposes
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find()
+    res.send({ users })
+  } catch (err) {
+    res.status(400).send(err)
+  }
+}
+
+// for routes with test purposes
+exports.deleteUser = async (req, res) => {
   const { id } = req.params
 
   if (!ObjectID.isValid(id))
     return res.status(404).send({ message: "Invalid ID" })
 
-  User.findByIdAndRemove(id)
-    .then(user => {
-      return !user
-        ? res
-            .status(400)
-            .send({ message: "Bad request! The user cannot be found" })
-        : res.send({ message: "Successfully deleted the user", user })
-    })
-    .catch(err => {
-      res.status(404).send({ message: err.message })
-    })
+  try {
+    const user = await User.findByIdAndRemove(id)
+    !user
+      ? res
+          .status(400)
+          .send({ message: "Bad request! The user cannot be found" })
+      : res.send({ message: "Successfully deleted the user", user })
+  } catch (err) {
+    res.status(404).send({ message: err.message })
+  }
 }
