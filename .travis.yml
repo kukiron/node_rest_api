@@ -5,9 +5,10 @@ language: node_js
 notifications:
   email: false
 
+# async-await implementation in node v7.6+
 node_js:
-  - "6"
   - "8"
+  - "9"
 
 services:
   - mongodb
