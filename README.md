@@ -2,14 +2,15 @@
 
 [![Build Status](https://travis-ci.org/kukiron/rest_api_boilerplate.svg?branch=master)](https://travis-ci.org/kukiron/rest_api_boilerplate) [![dependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/status.svg)](https://david-dm.org/kukiron/rest_api_boilerplate) [![devDependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/dev-status.svg)](https://david-dm.org/kukiron/rest_api_boilerplate?type=dev)
 
-A boiler plate project for API server built in Node using Express & MongoDB (implemented for Todo app React app)
+A boiler plate project to started building API server with Node, Express & MongoDB
 
 ## Usage
 
-Clone the repo using Git & start the development server in your local machine
+Clone the repo, install the dependencies & start the development server in your local machine
 
 ```shell
-> git clone https://github.com/kukiron/rest_api_boilerplate.git
+> git clone https://github.com/kukiron/node_rest_api.git
+> npm install
 > npm run dev:server
 ```
 
