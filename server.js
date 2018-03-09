@@ -25,7 +25,7 @@ app.use(
   })
 )
 app.use(bodyParser.json({ type: "*/*" }))
-app.options("*", cors())
+app.use(cors())
 // Set up the static file path
 app.use(express.static(path.resolve(__dirname, "assets")))
 
