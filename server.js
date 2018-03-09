@@ -4,6 +4,7 @@ const express = require("express")
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const morgan = require("morgan")
+const cors = require("cors")
 
 const router = require("./src/router")
 
@@ -24,6 +25,7 @@ app.use(
   })
 )
 app.use(bodyParser.json({ type: "*/*" }))
+app.options("*", cors())
 // Set up the static file path
 app.use(express.static(path.resolve(__dirname, "assets")))
 
