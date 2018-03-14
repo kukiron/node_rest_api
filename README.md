@@ -1,4 +1,4 @@
-# MY_REST_API
+# Node_REST_API
 
 [![Build Status](https://travis-ci.org/kukiron/node_rest_api.svg?branch=master)](https://travis-ci.org/kukiron/node_rest_api) [![dependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/status.svg)](https://david-dm.org/kukiron/node_rest_api) [![devDependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/dev-status.svg)](https://david-dm.org/kukiron/node_rest_api?type=dev)
 
