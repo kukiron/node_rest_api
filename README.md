@@ -1,6 +1,6 @@
 # MY_REST_API
 
-[![Build Status](https://travis-ci.org/kukiron/rest_api_boilerplate.svg?branch=master)](https://travis-ci.org/kukiron/rest_api_boilerplate) [![dependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/status.svg)](https://david-dm.org/kukiron/rest_api_boilerplate) [![devDependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/dev-status.svg)](https://david-dm.org/kukiron/rest_api_boilerplate?type=dev)
+[![Build Status](https://travis-ci.org/kukiron/node_rest_api.svg?branch=master)](https://travis-ci.org/kukiron/node_rest_api) [![dependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/status.svg)](https://david-dm.org/kukiron/node_rest_api) [![devDependencies Status](https://david-dm.org/kukiron/rest_api_boilerplate/dev-status.svg)](https://david-dm.org/kukiron/node_rest_api?type=dev)
 
 A boiler plate project to started building API server with Node, Express & MongoDB
 
